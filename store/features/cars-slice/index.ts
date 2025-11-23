@@ -7,6 +7,7 @@ const initialState:CarsInitialState  = {
   data: null,
   loading: false,
   error: null,
+  filters: [],
 };
 
 export const fetchCars = createAsyncThunk("cars/fetchCars", async (payload:any , { rejectWithValue }) => {
@@ -36,7 +37,16 @@ const citySlice = createSlice({
       })
       .addCase(fetchCars.fulfilled, (state, action: PayloadAction<any>) => {
         state.loading = false;
-        state.data = action.payload;
+        const response = action.payload;
+
+  // Store cars data always
+  state.data = response;
+
+  // Store filters only once
+  console.log('response.filters', response.filters);
+  if (state.filters.length === 0 && response?.filters) {
+    state.filters = response.filters;
+  }
       })
       .addCase(fetchCars.rejected, (state, action: PayloadAction<any>) => {
         state.loading = false;

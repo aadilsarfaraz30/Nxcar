@@ -1,6 +1,7 @@
 "use client";
 
 import AccordionItem from "@/components/common/accordion";
+import MultiRangeSlider from "@/components/common/multi-range";
 import { useEffect, useState } from "react";
 
 
@@ -98,16 +99,13 @@ const FiltersSidebar = ({ filters, onApplyFilters }: any) => {
       {/* YEAR ACCORDION */}
       <AccordionItem title={yearFilter?.displayName}>
         <div className="space-y-2">
-          <input
-            type="range"
-            min={yearFilter?.min}
-            max={yearFilter?.max}
-            onChange={(e) =>
-              setSelectedYear({
-                min: yearFilter.min,
-                max: Number(e.target.value),
-              })
-            }
+          <MultiRangeSlider
+            min={Number(yearFilter.min)}
+            max={Number(yearFilter.max)}
+            onChange={(value) => setSelectedYear({
+              min: value.min,
+              max: value.max
+            })}
           />
 
           <p className="text-sm text-gray-600">

@@ -8,7 +8,7 @@ import FiltersSidebar from "@/components/module/filter-sidebar";
 
 const HomePageIndex = () => {
   const dispatch = useAppDispatch();
-  const { data: carsData, loading } = useAppSelector((state) => state.carsSlice);
+  const { data: carsData, loading, filters } = useAppSelector((state) => state.carsSlice);
    const { selectedCity } = useAppSelector((state) => state.citySlice);
 
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -18,6 +18,8 @@ const HomePageIndex = () => {
   const [filterPayload, setFilterPayload] = useState<any[]>([]);
 
   const isFetchingMore = useRef(false);
+
+  console.log('filters', filters);
 
   const buildPayload = (pageNo: number) => ({
     page: pageNo,
@@ -64,6 +66,7 @@ const HomePageIndex = () => {
         const totalPages = carsData?.pagination?.total_pages ?? 1;
 
         if (page < totalPages) {
+          console.log("Loading more cars...");
           fetchCarsData(page + 1);
         }
       }
@@ -84,7 +87,7 @@ const HomePageIndex = () => {
       <section className="w-1/4 shadow-right-only overflow-auto">
         {carsData?.filters && (
           <FiltersSidebar
-            filters={carsData.filters}
+            filters={filters}
             onApplyFilters={handleApplyFilters}
           />
         )}

@@ -112,4 +112,5 @@ export interface CarsInitialState {
   data: CarsApiResponse | null;
   loading: boolean;
   error: string | null;
+  filters: CarFilter[];
 }
