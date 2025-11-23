@@ -23,7 +23,7 @@ const HomePageIndex = () => {
     page: pageNo,
     fltr: [
     ...filterPayload,
-    { city_id: selectedCity ?? "76" } 
+    { city_id: selectedCity?.city_id ?? "76" } 
   ],
     sort: null,
     sort_by: null,

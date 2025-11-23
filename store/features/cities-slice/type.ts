@@ -16,5 +16,8 @@ export interface CityState {
   data: City[];
   loading: boolean;
   error: string | null;
-  selectedCity: string;
+  selectedCity: {
+    city_id: string;
+    city_name: string;
+  };
 }

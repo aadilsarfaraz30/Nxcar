@@ -46,7 +46,10 @@ const CityList = ({ cities, onClose }: CityListProps) => {
         .filter((city) => city.city_image !== null)
         .map((city) => (
           <div key={city.city_id} className="mb-3" onClick={() => {
-            dispatch(setSelectedCity(city.city_id))
+            dispatch(setSelectedCity({
+              city_id: city.city_id,
+              city_name: city.city_name
+            }))
             onClose()
           }}>
             <Image
@@ -68,7 +71,10 @@ const CityList = ({ cities, onClose }: CityListProps) => {
             <Chip
               label={city.city_name}
               onClick={() => {
-                dispatch(setSelectedCity(city.city_id))
+                dispatch(setSelectedCity({
+                  city_id: city.city_id,
+                  city_name: city.city_name
+                }))
                 onClose()
               }}
             />

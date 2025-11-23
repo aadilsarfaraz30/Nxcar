@@ -7,7 +7,10 @@ const initialState: CityState = {
   data: [],
   loading: false,
   error: null,
-  selectedCity: ''
+  selectedCity: {
+    city_id: "76",
+    city_name: "Delhi",
+  }
 };
 
 export const fetchCity = createAsyncThunk("city/fetchCity", async (_, { rejectWithValue }) => {

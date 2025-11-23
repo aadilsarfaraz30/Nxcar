@@ -39,7 +39,7 @@ const Header = () => {
           height={1000}
           loading="lazy"
         />
-        <span>{selectedCity ? selectedCity : "Delhi"}</span>
+        <span>{selectedCity ? selectedCity?.city_name : "Delhi"}</span>
         <Image
           src={svgIcon.dropDown}
           alt="logo"
