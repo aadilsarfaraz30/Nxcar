@@ -18,7 +18,7 @@ const Header = () => {
   }, []);
 
   return (
-    <div className="w-full h-[100px] p-4 flex justify-between">
+    <div className="w-full h-20 p-4 flex justify-between shadow-sm">
       <Image
         src={svgIcon.logo}
         alt="logo"

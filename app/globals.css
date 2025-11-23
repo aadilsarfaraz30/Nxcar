@@ -12,7 +12,14 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --color-primary: #265A57;
+  
 }
+@layer utilities {
+  .shadow-right-only {
+    box-shadow: 6px 0 12px -4px rgba(0, 0, 0, 0.15);
+  }
+}
+
 
 @media (prefers-color-scheme: dark) {
   :root {

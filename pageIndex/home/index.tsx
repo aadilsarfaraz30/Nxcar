@@ -80,8 +80,8 @@ const HomePageIndex = () => {
   };
 
   return (
-    <div className="flex h-[calc(100vh-100px)]">
-      <section className="w-1/4 border-r overflow-auto">
+    <div className="flex h-[calc(100vh-80px)]">
+      <section className="w-1/4 shadow-right-only overflow-auto">
         {carsData?.filters && (
           <FiltersSidebar
             filters={carsData.filters}

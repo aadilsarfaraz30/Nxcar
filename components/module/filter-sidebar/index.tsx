@@ -1,6 +1,9 @@
 "use client";
 
+import AccordionItem from "@/components/common/accordion";
 import { useEffect, useState } from "react";
+
+
 
 const FiltersSidebar = ({ filters, onApplyFilters }: any) => {
   const priceFilter = filters.find((f: any) => f.name === "price");
@@ -45,7 +48,7 @@ const FiltersSidebar = ({ filters, onApplyFilters }: any) => {
       });
     }
 
-    // MAKE FILTER (brand)
+    // MAKE FILTER
     if (selectedMakes.length > 0) {
       fltrPayload.push({
         type: "multiselect",
@@ -54,7 +57,7 @@ const FiltersSidebar = ({ filters, onApplyFilters }: any) => {
       });
     }
 
-    // MODEL FILTER (selected models)
+    // MODEL FILTER
     if (selectedModel.length > 0) {
       fltrPayload.push({
         type: "multiselect",
@@ -62,24 +65,17 @@ const FiltersSidebar = ({ filters, onApplyFilters }: any) => {
         options: selectedModel,
       });
     }
-
-    console.log("🔥 FINAL FILTER PAYLOAD →", fltrPayload);
     onApplyFilters(fltrPayload);
   };
 
-  // ⭐ AUTO APPLY FILTER ON CHANGE
   useEffect(() => {
     applyFilters();
   }, [selectedPrice, selectedYear, selectedMakes, selectedModel]);
 
   return (
-    <aside className="w-full p-4">
-      {/* PRICE FILTER */}
-      <div className="mb-6">
-        <h3 className="font-semibold text-lg mb-2">
-          {priceFilter?.displayName}
-        </h3>
+    <aside className="w-full p-4 flex flex-col gap-4">
 
+      <AccordionItem title={priceFilter?.displayName} defaultOpen={true}>
         {priceFilter?.groups?.map((g: any) => (
           <div key={g.name} className="flex items-center gap-2 mb-2">
             <input
@@ -97,39 +93,33 @@ const FiltersSidebar = ({ filters, onApplyFilters }: any) => {
             </label>
           </div>
         ))}
-      </div>
+      </AccordionItem>
 
-      {/* YEAR FILTER */}
-      <div className="mb-6">
-        <h3 className="font-semibold text-lg mb-2">
-          {yearFilter?.displayName}
-        </h3>
+      {/* YEAR ACCORDION */}
+      <AccordionItem title={yearFilter?.displayName}>
+        <div className="space-y-2">
+          <input
+            type="range"
+            min={yearFilter?.min}
+            max={yearFilter?.max}
+            onChange={(e) =>
+              setSelectedYear({
+                min: yearFilter.min,
+                max: Number(e.target.value),
+              })
+            }
+          />
 
-        <input
-          type="range"
-          min={yearFilter?.min}
-          max={yearFilter?.max}
-          onChange={(e) =>
-            setSelectedYear({
-              min: yearFilter.min,
-              max: Number(e.target.value),
-            })
-          }
-        />
-        <p className="text-sm text-gray-600">
-          {yearFilter.min} - {selectedYear.max ?? yearFilter.max}
-        </p>
-      </div>
+          <p className="text-sm text-gray-600">
+            {yearFilter.min} - {selectedYear.max ?? yearFilter.max}
+          </p>
+        </div>
+      </AccordionItem>
 
-      {/* MAKE + MODEL FILTER */}
-      <div>
-        <h3 className="font-semibold text-lg mb-2">
-          {makeFilter?.displayName}
-        </h3>
-
+      <AccordionItem title={makeFilter?.displayName}>
         {makeFilter?.options?.map((brand: any) => (
           <div key={brand.make_id} className="mb-4">
-            {/* SELECT BRAND (MAKE) */}
+
             <div className="mt-1 flex gap-2 items-center">
               <input
                 type="checkbox"
@@ -144,12 +134,10 @@ const FiltersSidebar = ({ filters, onApplyFilters }: any) => {
                 }}
               />
               <label className="font-medium">
-                {" "}
                 {brand.make} ({brand.count})
               </label>
             </div>
 
-            {/* MODELS */}
             <div className="pl-3 mt-2">
               {brand.models.map((m: any) => (
                 <div key={m.model_id} className="flex items-center gap-2">
@@ -174,7 +162,8 @@ const FiltersSidebar = ({ filters, onApplyFilters }: any) => {
             </div>
           </div>
         ))}
-      </div>
+      </AccordionItem>
+
     </aside>
   );
 };
