@@ -97,7 +97,7 @@ const HomePageIndex = () => {
         ref={scrollRef}
         className="w-3/4 flex flex-wrap gap-10 overflow-auto relative p-4"
       >
-        {cars.map((car, idx) => (
+        {cars?.length > 0 && cars?.map((car, idx) => (
           <CarCard key={idx} car={car} />
         ))}
 
