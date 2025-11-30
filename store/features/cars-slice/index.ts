@@ -21,6 +21,16 @@ export const fetchCars = createAsyncThunk("cars/fetchCars", async (payload:any ,
   }
 });
 
+export const fetchFilters = createAsyncThunk("cars/fetchFilters", async (_ , { rejectWithValue }) => {
+  try {
+    const response = await api.post("/test-cars-list");
+    return response?.data; 
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data?.message || "Failed to fetch products");
+  }
+});
+
+
 const citySlice = createSlice({
   name: "city",
   initialState,
@@ -37,18 +47,21 @@ const citySlice = createSlice({
       })
       .addCase(fetchCars.fulfilled, (state, action: PayloadAction<any>) => {
         state.loading = false;
-        const response = action.payload;
-
-  // Store cars data always
-  state.data = response;
-
-  // Store filters only once
-  console.log('response.filters', response.filters);
-  if (state.filters.length === 0 && response?.filters) {
-    state.filters = response.filters;
-  }
+        state.data = action.payload;
       })
       .addCase(fetchCars.rejected, (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchFilters.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchFilters.fulfilled, (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.filters = action.payload?.filters;
+      })
+      .addCase(fetchFilters.rejected, (state, action: PayloadAction<any>) => {
         state.loading = false;
         state.error = action.payload;
       });

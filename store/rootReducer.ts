@@ -9,7 +9,7 @@ import carsSlice from "@/store/features/cars-slice";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["loginSlice"], // only persist the login slice
+  whitelist: [""], // which reducers to persist
 };
 
 const rootReducer = combineReducers({

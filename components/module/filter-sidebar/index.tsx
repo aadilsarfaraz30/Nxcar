@@ -1,8 +1,9 @@
 "use client";
 
 import AccordionItem from "@/components/common/accordion";
-import MultiRangeSlider from "@/components/common/multi-range";
 import { useEffect, useState } from "react";
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
 
 
 
@@ -11,6 +12,7 @@ const FiltersSidebar = ({ filters, onApplyFilters }: any) => {
   const yearFilter = filters.find((f: any) => f.name === "year");
   const makeFilter = filters.find((f: any) => f.name === "make");
 
+      
   const [selectedPrice, setSelectedPrice] = useState<any>({
     min: null,
     max: null,
@@ -75,93 +77,97 @@ const FiltersSidebar = ({ filters, onApplyFilters }: any) => {
 
   return (
     <aside className="w-full p-4 flex flex-col gap-4">
-
-      <AccordionItem title={priceFilter?.displayName} defaultOpen={true}>
-        {priceFilter?.groups?.map((g: any) => (
-          <div key={g.name} className="flex items-center gap-2 mb-2">
-            <input
-              type="radio"
-              name="price"
-              onChange={() =>
-                setSelectedPrice({
-                  min: g.min,
-                  max: g.max ?? 10000000,
-                })
-              }
-            />
-            <label>
-              {g.displayName} ({g.count})
-            </label>
-          </div>
-        ))}
-      </AccordionItem>
-
-      {/* YEAR ACCORDION */}
-      <AccordionItem title={yearFilter?.displayName}>
-        <div className="space-y-2">
-          <MultiRangeSlider
-            min={Number(yearFilter.min)}
-            max={Number(yearFilter.max)}
-            onChange={(value) => setSelectedYear({
-              min: value.min,
-              max: value.max
-            })}
-          />
-
-          <p className="text-sm text-gray-600">
-            {yearFilter.min} - {selectedYear.max ?? yearFilter.max}
-          </p>
-        </div>
-      </AccordionItem>
-
-      <AccordionItem title={makeFilter?.displayName}>
-        {makeFilter?.options?.map((brand: any) => (
-          <div key={brand.make_id} className="mb-4">
-
-            <div className="mt-1 flex gap-2 items-center">
+      {priceFilter && (
+        <AccordionItem title={priceFilter?.displayName} defaultOpen={true}>
+          {priceFilter?.groups?.map((g: any) => (
+            <div key={g.name} className="flex items-center gap-2 mb-2">
               <input
-                type="checkbox"
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setSelectedMakes((prev) => [...prev, brand.make]);
-                  } else {
-                    setSelectedMakes((prev) =>
-                      prev.filter((m) => m !== brand.make)
-                    );
-                  }
-                }}
+                type="radio"
+                name="price"
+                onChange={() =>
+                  setSelectedPrice({
+                    min: g.min,
+                    max: g.max ?? 10000000,
+                  })
+                }
               />
-              <label className="font-medium">
-                {brand.make} ({brand.count})
+              <label>
+                {g.displayName} ({g.count})
               </label>
             </div>
+          ))}
+        </AccordionItem>
+      )}
 
-            <div className="pl-3 mt-2">
-              {brand.models.map((m: any) => (
-                <div key={m.model_id} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    value={m.model}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setSelectedModel((prev) => [...prev, m.model]);
-                      } else {
-                        setSelectedModel((prev) =>
-                          prev.filter((x) => x !== m.model)
-                        );
-                      }
-                    }}
-                  />
-                  <label>
-                    {m.model} ({m.count})
-                  </label>
-                </div>
-              ))}
+      {/* YEAR ACCORDION */}
+      {yearFilter && (
+        <AccordionItem title={yearFilter?.displayName}>
+          <Slider
+            range
+            min={Number(yearFilter?.min)}
+            max={Number(yearFilter?.max)}
+            value={[
+              selectedYear?.min ?? yearFilter?.min,
+              selectedYear?.max ?? yearFilter?.max,
+            ]}
+            onChange={(value:any) =>
+              setSelectedYear({ min: value[0], max: value[1] })
+            }
+          />
+           <p className="text-sm text-gray-600">
+            {selectedYear?.min ?? yearFilter?.min} - {selectedYear?.max ?? yearFilter?.max}
+          </p>
+        </AccordionItem>
+      )}
+
+      {makeFilter && (
+        <AccordionItem title={makeFilter?.displayName}>
+          {makeFilter?.options?.map((brand: any) => (
+            <div key={brand.make_id} className="mb-4">
+              <div className="mt-1 flex gap-2 items-center">
+                <input
+                  type="checkbox"
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setSelectedMakes((prev) => [...prev, brand.make]);
+                    } else {
+                      setSelectedMakes((prev) =>
+                        prev.filter((m) => m !== brand.make)
+                      );
+                    }
+                  }}
+                />
+                <label className="font-medium">
+                  {brand.make} ({brand.count})
+                </label>
+              </div>
+
+              <div className="pl-3 mt-2">
+                {brand.models.map((m: any) => (
+                  <div key={m.model_id} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      value={m.model}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedModel((prev) => [...prev, m.model]);
+                        } else {
+                          setSelectedModel((prev) =>
+                            prev.filter((x) => x !== m.model)
+                          );
+                        }
+                      }}
+                    />
+                    <label>
+                      {m.model} ({m.count})
+                    </label>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
-      </AccordionItem>
-
+          ))}
+        </AccordionItem>
+      )}
     </aside>
   );
 };
